@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "glob": "^10.2.6",
+    "posthtml": "^0.16.6",
     "vite": "^4.3.9"
   }
 }
