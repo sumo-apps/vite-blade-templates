@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import posthtml from 'posthtml'
 import { glob } from 'glob'
-import fs from 'fs'
+import fs from 'node:fs'
 
 const components = {};
 const allFiles = glob.sync('src/**/*.*')
@@ -27,9 +27,12 @@ const plugin = function (tree) {
 function bladeTemplatesPlugin() {
   return {
     name: 'blade-templates-plugin',
-    async transformIndexHtml(html) {
-      const { html: transformedHtml } = await posthtml(plugin).process(html);
-      return transformedHtml;
+    transformIndexHtml: {
+      enforce: 'pre',
+      async transform(html) {
+        const { html: transformedHtml } = await posthtml(plugin).process(html);
+        return transformedHtml;
+      }
     },
     configureServer(server) {
       server.watcher.on('change', (filePath) => {
